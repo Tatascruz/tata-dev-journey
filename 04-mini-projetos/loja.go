@@ -4,37 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
+
+	"tata-dev-journey/04-mini-projetos/models"
 )
 
-// Estrutura para representar um produto
-type Produto struct {
-	Nome  string
-	Preco float64
-}
-
 func main() {
-	// Lista de produtos disponíveis na loja
-	produtos := []Produto{
-		{"Caixa Decorada", 59.90},
-		{"Porta Joias", 89.90},
-		{"Necessaire", 39.90},
-		{"Porta-Retrato", 45.00},
-	}
-
-	// Carrinho de compras (slice vazio no início)
-	var carrinho []Produto
 	reader := bufio.NewReader(os.Stdin)
-
-	fmt.Println("Bem-vindo á Loja Lumi")
+	var produtos []models.Produto
 
 	for {
 		fmt.Println("\n---- MENU ----")
-		fmt.Println("1 - Ver produtos disponíveis")
-		fmt.Println("2 - Adicionar produto ao carrinho")
-		fmt.Println("3 - Ver carrinho e total")
-		fmt.Println("4 - Finalizar compra e sair")
+		fmt.Println("1 - Cadastrar produto")
+		fmt.Println("2 - Listar Produtos")
+		fmt.Println("3 - Finalizar compra e sair")
 		fmt.Print("Escolha uma opção: ")
 
 		var opcao int
@@ -43,43 +26,51 @@ func main() {
 
 		switch opcao {
 		case 1:
-			fmt.Println("\nProdutos disponíveis")
-			for i, p := range produtos {
-				fmt.Printf("%d. %s - R$ %.2f\n", i+1, p.Nome, p.Preco)
-			}
+			fmt.Println() //Adiciona uma linha "um espaço"
+			novo := cadastrarProduto(reader, len(produtos)+1)
+			produtos = append(produtos, novo)
 
 		case 2:
-			fmt.Print("Digite o número do produto que deseja adicionar: ")
-			texto, _ := reader.ReadString('\n')
-			texto = strings.TrimSpace(texto)
-			indice, err := strconv.Atoi(texto)
-
-			if err != nil || indice < 1 || indice > len(produtos) {
-				fmt.Println("Produto inválido.")
-			} else {
-				carrinho = append(carrinho, produtos[indice-1])
-				fmt.Printf("%s adicionado ao carrinho!\n", produtos[indice-1].Nome)
-			}
+			listarProdutos(produtos)
 
 		case 3:
-			if len(carrinho) == 0 {
-				fmt.Println("Seu carrinho esta vazio.")
-			} else {
-				fmt.Println("\n Itens no seu carrinho:")
-				total := 0.0
-				for i, p := range carrinho {
-					fmt.Printf("%d. %s - R$ %.2f\n", i+1, p.Nome, p.Preco)
-					total += p.Preco
-				}
-				fmt.Printf("\n Total de compra: R$ %.2f\n", total)
-			}
-
-		case 4:
-			fmt.Println("Obrigado por comprar na Loja Lumi! Até a próxima!!")
+			fmt.Println("Saindo...")
 			return
 
 		default:
 			fmt.Println("Opção inválida. Tente novamente.")
 		}
+	}
+}
+
+func cadastrarProduto(reader *bufio.Reader, id int) models.Produto {
+	var p models.Produto
+	p.ID = id
+
+	fmt.Print("Nome do produto: ")
+	nome, _ := reader.ReadString('\n')
+	p.Nome = strings.TrimSpace(nome)
+
+	fmt.Print("Preço: ")
+	fmt.Scan(&p.Preco)
+	reader.ReadString('\n')
+
+	fmt.Print("Quantidade: ")
+	fmt.Scan(&p.Quantidade)
+	reader.ReadString('\n')
+
+	fmt.Println("Produto cadastrado com sucesso!")
+	return p
+}
+
+func listarProdutos(lista []models.Produto) {
+	if len(lista) == 0 {
+		fmt.Println("Nenhum produto cadastrado.")
+		return
+	}
+
+	fmt.Println("\n--- PRODUTOS CADASTRADOS ---")
+	for _, p := range lista {
+		fmt.Printf("%d) %s | R$ %.2f | %d unidades\n", p.ID, p.Nome, p.Preco, p.Quantidade)
 	}
 }
