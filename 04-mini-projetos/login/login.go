@@ -6,14 +6,13 @@ import (
 	"os"
 	"strings" // Para limpar espaços e quebras de linha
 
-	"tata-dev-journey/04-mini-projetos/models"
+	"tata-dev-journey/04-mini-projetos/login/models"
 )
 
 func main() {
 	reader := bufio.NewReader(os.Stdin) // Reader para ler textos com espaços (ex: "Maria da Silva")
-	
-	var usuarios []models.User              // Slice para guardar todos os usúarios cadastrados
-	
+
+	var usuarios []models.User // Slice para guardar todos os usúarios cadastrados
 
 	// Loop principal do sistema
 	for {
@@ -26,17 +25,17 @@ func main() {
 		fmt.Print("Escolha uma opção: ")
 
 		var opcao int
-        fmt.Scan(&opcao)
-		
+		fmt.Scan(&opcao)
+
 		reader.ReadString('\n') // Aqui limpamos o ENTER que fica "sobrando" depois do Scan
 
 		switch opcao {
 		case 1:
-		    novo := cadastrarUsuario(reader, len(usuarios)+1)
+			novo := cadastrarUsuario(reader, len(usuarios)+1)
 			usuarios = append(usuarios, novo)
-		
+
 		case 2:
-		    listarUsuarios(usuarios)
+			listarUsuarios(usuarios)
 
 		case 3:
 			fmt.Println("Saindo... Até logo!")
@@ -56,7 +55,7 @@ func cadastrarUsuario(reader *bufio.Reader, id int) models.User {
 	var u models.User
 
 	u.ID = id
-	
+
 	fmt.Print("Nome: ")
 	nome, _ := reader.ReadString('\n')
 	u.Nome = strings.TrimSpace(nome) // Remove \n e espaços das pontas
@@ -70,7 +69,7 @@ func cadastrarUsuario(reader *bufio.Reader, id int) models.User {
 	fmt.Print("Senha: ")
 	senha, _ := reader.ReadString('\n')
 	u.Senha = strings.TrimSpace(senha)
-	
+
 	fmt.Println("\nUsúario cadastrado com sucesso!")
 
 	return u
@@ -79,7 +78,7 @@ func cadastrarUsuario(reader *bufio.Reader, id int) models.User {
 // --------------LOGIN--------------
 
 func listarUsuarios(usuarios []models.User) {
-    if len(usuarios) == 0{
+	if len(usuarios) == 0 {
 		fmt.Println("Nnenhum usúario cadastrado ainda.")
 		return
 	}
@@ -90,4 +89,3 @@ func listarUsuarios(usuarios []models.User) {
 
 	}
 }
-

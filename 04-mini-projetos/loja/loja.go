@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"tata-dev-journey/04-mini-projetos/models"
+	"tata-dev-journey/04-mini-projetos/loja/models"
 )
 
 func main() {
