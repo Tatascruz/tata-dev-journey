@@ -1,12 +1,16 @@
 package utils
 
 import (
-	"fmt"
-	"math/rand"
-	"time"
+	"github.com/google/uuid"
+
+	"gerador-id/models" // usa o nome que apareceu no seu go.mod
 )
 
-func GeradorID() string {
-	rand.Seed(time.Now().UnixNano())
-	return fmt.Sprintf("%d-%d", time.Now().Unix(), rand.Intn(99999))
+// GerarID cria um novo ID usando UUID e devolve um models.ID
+func GeraRID() models.ID {
+	novoID := uuid.New().String() // gera um ID único em formato de texto
+
+	return models.ID{
+		Codigo: novoID,
+	}
 }
