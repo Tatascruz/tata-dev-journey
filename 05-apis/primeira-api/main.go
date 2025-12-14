@@ -8,13 +8,6 @@ import (
 
 // handler para a rota /hello
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-	// só permitimos o método GET aqui
-	if r.Method != http.MethodGet {
-		w.WriteHeader(http.StatusMethodNotAllowed) // 405
-		fmt.Fprintln(w, "Método não permitido")
-		return
-	}
-
 	fmt.Fprintln(w, "Olá, Tata! Esta é a sua primeira API em Go ")
 }
 
@@ -25,7 +18,6 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Método não permitido")
 		return
 	}
-
 	fmt.Fprintln(w, "API rodando :) Tudo certo por aqui!!!")
 }
 
@@ -36,8 +28,16 @@ func main() {
 	// Registra a rota /status
 	http.HandleFunc("/status", statusHandler)
 
-	fmt.Println("Servidor rodando em http://localhost:8080")
-	fmt.Println("Acesse http://localhost:8080/hello ou /status no navegador")
+	//Registra a rota /produtos
+	http.HandleFunc("/produtos", produtosHandler)
+	http.HandleFunc("/produtos/", produtoPorIDHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Println("Servidor rodando em http://localhost:8081")
+	fmt.Println("Rotas disponíveis:")
+	fmt.Println("GET    /produtos")
+	fmt.Println("POST   /produtos")
+	fmt.Println("GET    /produtos/{id}")
+	fmt.Println("DELETE /produtos/{id}")
+
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
