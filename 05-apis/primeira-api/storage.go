@@ -26,9 +26,15 @@ func buscaProdutoPorID(id int) *Produto {
 func removeProdutoPorID(id int) bool {
 	for i, p := range produtos {
 		if p.ID == id {
-			produtos = append(produtos[:1], produtos[i+1:]...)
+			produtos = append(produtos[:i], produtos[i+1:]...)
 			return true
 		}
 	}
 	return false
+}
+
+func gerarNovoID() int {
+	id := proxID
+	proxID++
+	return id
 }

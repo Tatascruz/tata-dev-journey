@@ -33,7 +33,9 @@ func produtosHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		novo = adicionaProduto(novo)
+		// Gera ID e salva
+		novo.ID = gerarNovoID()
+		produtos = append(produtos, novo)
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusCreated)
@@ -46,6 +48,7 @@ func produtosHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Produtos/{id} -> GET busca / PUT atualiza / DELETE remove
 func produtoPorIDHandler(w http.ResponseWriter, r *http.Request) {
 	//Ex: /produtos/1 -> queremos pegar "1"
 	idStr := strings.TrimPrefix(r.URL.Path, "/produtos/")
@@ -103,7 +106,7 @@ func produtoPorIDHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.WriteHeader(http.StatusNoContent) //204
+		w.WriteHeader(http.StatusNoContent) //204 = sem corpo
 
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
