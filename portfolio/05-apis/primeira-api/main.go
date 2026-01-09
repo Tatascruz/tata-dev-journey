@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"tata-dev-journey/05-apis/primeira-api/database"
+	"tata-dev-journey/05-apis/primeira-api/models"
 )
 
 // handler para a rota /hello
@@ -22,6 +24,15 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	database.ConnectDatabase()
+
+	err := database.DB.AutoMigrate(&models.Produto{})
+	if err != nil {
+		log.Fatal("Erro ao migrar o banco")
+	}
+
+	log.Println("Banco migrado com sucesso!")
+
 	// Registra a rota /hello
 	http.HandleFunc("/hello", helloHandler)
 
